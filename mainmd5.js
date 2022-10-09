@@ -1,5 +1,3 @@
-
-md5 = require('md5')
 str = 'They are deterministic'
 //str = 'Cryptographyxyz456'
 re = md_5(str)
@@ -7,7 +5,7 @@ re = md_5(str)
 // console.log(typeof(re))
 // console.log(re.length)
 // console.log(re.length*8)
-
+console.log(re)
 
 
 
@@ -71,17 +69,22 @@ function md_5(str){
     while(Round<=4){
         for(let i = 0;i<16;i++){
             s++;
+            console.log('Round '+Round+' '+'S'+(s)+' :')
             let f = 0
             if(Round == 1){
                 f = ((b & c)|(~b & d))
+                console.log('\tF function is (B AND C)OR(NOT(B) AND D)')
             }else if(Round ==2){
                 f = ((b & d)|(c & ~d))
+                console.log('\tF function is (B AND D)OR(C AND NOT(D))')
             }else if(Round ==3){
                 f = (b ^ c ^ d)
+                console.log('\tF function is B XOR C XOR D')
             }else{
                 f = (c ^ (b | ~d))
+                console.log('\tF function is C XOR (B OR NOT(D))')
             }
-            console.log('Round '+Round+' '+i+' operations : F-->'+f.toString(16))
+             
 
             //mod1
             let mod1 = (a + f)
@@ -96,27 +99,81 @@ function md_5(str){
             console.log('\tMod3:',mod3.toString(16))
 
             //Left bit-shift
+            let shift = countOfShiftLeft(s)
+            mod3 = shiftbit32Circular(mod3,shift)
+            console.log('\tMod3 shift bit ',shift,':',mod3.toString(16))
 
+            //mod4
+            let mod4 = (B+BigInt(mod3))% 0x100000000n
+            console.log('\tMod4:',mod4.toString(16))
+
+
+            //new a,b,c,d
+            a = d
+            d = c
+            c = b
+            b = mod4
+            console.log('\t\tA = ',a.toString(16))
+            console.log('\t\tB = ',b.toString(16))
+            console.log('\t\tC = ',c.toString(16))
+            console.log('\t\tD = ',d.toString(16))
             
         }
         Round++;
         console.log(Round)
     }
+    a = (a+A)%0x100000000n
+    b = (b+B)%0x100000000n
+    c = (c+C)%0x100000000n
+    d = (d+D)%0x100000000n
+    let finalResult = a.toString(16)+b.toString(16)+c.toString(16)+d.toString(16)
 
 
-    return DataBlock
+
+    return finalResult
+}
+
+function shiftbit32Circular(value,sh){
+    value = value.toString(2)
+    while(value.length < 32){
+        value = '0'+value
+    }
+    //console.log(value.toString(2))
+    let re = value.slice(sh,value.length) + value.slice(0,sh)
+    //console.log(value.toString(2))
+    return parseInt(re,2);
 }
 
 function countOfShiftLeft(r){
-    if([1,5,9,13].includes(r)){
-        return 7;
-    }else if([2,6,10,14]){
+    sh = [7,12,17,22,5,9,14,20,4,11,16,13,6,10,15,21]
+    start = 1
+    l = start
+    index = 0
+    if(r>64){
+        return -1;
+    }
+    while(l != r && l<64){
+        if(l%16 == 0){
+            start=l+1
+            l=start
+            index++;
+        }else{
+            l = l+4
+            if(l-start > 12){
+                index++;
+                start++;
+                l=start
+            }
+        }
+        //console.log('start',start,':l',l)
+        
 
     }
+    return sh[index]
+    // if([1,5,9,13].includes(r)){
+    //     return 7;
+    // }else if([2,6,10,14]){
+
+    // }
 }
 
-
-
-
-
-console.log(md5(str))
