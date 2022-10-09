@@ -73,16 +73,16 @@ function md_5(str){
             let f = 0
             if(Round == 1){
                 f = ((b & c)|(~b & d))
-                console.log('\tF function is (B AND C)OR(NOT(B) AND D)')
+                console.log('\tF function is (B AND C)OR(NOT(B) AND D) --->',f.toString(16))
             }else if(Round ==2){
                 f = ((b & d)|(c & ~d))
-                console.log('\tF function is (B AND D)OR(C AND NOT(D))')
+                console.log('\tF function is (B AND D)OR(C AND NOT(D)) --->',f.toString(16))
             }else if(Round ==3){
                 f = (b ^ c ^ d)
-                console.log('\tF function is B XOR C XOR D')
+                console.log('\tF function is B XOR C XOR D --->',f.toString(16))
             }else{
                 f = (c ^ (b | ~d))
-                console.log('\tF function is C XOR (B OR NOT(D))')
+                console.log('\tF function is C XOR (B OR NOT(D)) --->',f.toString(16))
             }
              
 
