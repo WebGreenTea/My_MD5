@@ -16,12 +16,17 @@ function md_5(str){
     B = 0x89abcdefn
     C = 0xfedcba98n
     D = 0x76543210n
+    // A = 0x67452301n
+    // B = 0xEFCDAB89n
+    // C = 0x98BADCFEn
+    // D = 0x10325476n
     let _M = []
     let _K = []
     //defind K
     for(let i =0;i<64;i++){
-        _K.push(BigInt(Math.floor((Math.abs(Math.sin(0+1)))*Math.pow(2,32))))
+        _K.push(BigInt(Math.floor((Math.abs(Math.sin(i+1)))*Math.pow(2,32))))
     }
+    console.log("K(Hex) -->",_K.map(function(x){return x.toString(16)}))
 
 
     //create data block
@@ -102,6 +107,7 @@ function md_5(str){
             let shift = countOfShiftLeft(s)
             mod3 = shiftbit32Circular(mod3,shift)
             console.log('\tMod3 shift bit ',shift,':',mod3.toString(16))
+            //mod3 = 0xe984f895
 
             //mod4
             let mod4 = (B+BigInt(mod3))% 0x100000000n
