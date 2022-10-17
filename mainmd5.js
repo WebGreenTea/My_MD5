@@ -1,4 +1,5 @@
 str = 'They are deterministic'
+//str = 'hell'
 //str = 'Cryptographyxyz456'
 re = md_5(str)
 // console.log(re)
@@ -92,7 +93,7 @@ function md_5(str){
              
 
             //mod1
-            let mod1 = (a + f)
+            let mod1 = (a + f)% 0x100000000n
             console.log('\tMod1:',mod1.toString(16))
 
             //mod2
@@ -182,4 +183,8 @@ function countOfShiftLeft(r){
 
     // }
 }
+
+
+
+
 
