@@ -65,6 +65,12 @@ function md_5(str){
     })
     console.log("M(Hex) -->",_M.map(function(x){return x.toString(16)}))
 
+
+    Mindex = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
+        1,6,11,0,5,10,15,4,9,14,3,8,13,2,7,12,
+        5,8,11,14,1,4,7,10,13,0,3,6,9,12,15,2,
+        0,7,14,5,12,3,10,1,8,15,6,13,4,11,2,9
+    ]
     
     let a = A;
     let b = B;
@@ -72,6 +78,9 @@ function md_5(str){
     let d = D;
     let Round = 1
     let s = 0
+
+
+
     while(Round<=4){
         for(let i = 0;i<16;i++){
             s++;
@@ -94,15 +103,15 @@ function md_5(str){
 
             //mod1
             let mod1 = (a + f)% 0x100000000n
-            console.log('\tMod1:',mod1.toString(16))
-
+            console.log('\tMod1:\t\t',a.toString(16),'+',f.toString(16),'=',mod1.toString(16))
+            
             //mod2
-            let mod2 = (BigInt(_M[i])+mod1)% 0x100000000n
-            console.log('\tMod2:',mod2.toString(16))
+            let mod2 = (BigInt(_M[Mindex[s-1]])+mod1)% 0x100000000n
+            console.log('\tMod2: M(',Mindex[s-1],')\t',BigInt(_M[Mindex[s-1]]).toString(16),'+',mod1.toString(16),'=',mod2.toString(16))
 
             //mod3
-            let mod3 = (_K[i]+mod2)%0x100000000n
-            console.log('\tMod3:',mod3.toString(16))
+            let mod3 = (_K[s-1]+mod2)%0x100000000n
+            console.log('\tMod3: K(',s,')\t',_K[s-1].toString(16),'+',mod2.toString(16),'=',mod3.toString(16))
 
             //Left bit-shift
             let shift = countOfShiftLeft(s)
@@ -111,8 +120,8 @@ function md_5(str){
             //mod3 = 0xe984f895
 
             //mod4
-            let mod4 = (B+BigInt(mod3))% 0x100000000n
-            console.log('\tMod4:',mod4.toString(16))
+            let mod4 = (b+BigInt(mod3))% 0x100000000n
+            console.log('\tMod4:\t\t',b.toString(16),'+',mod3.toString(16),'=',mod4.toString(16))
 
 
             //new a,b,c,d
@@ -133,6 +142,8 @@ function md_5(str){
     b = (b+B)%0x100000000n
     c = (c+C)%0x100000000n
     d = (d+D)%0x100000000n
+
+    
     let finalResult = a.toString(16)+b.toString(16)+c.toString(16)+d.toString(16)
 
 
@@ -173,8 +184,6 @@ function countOfShiftLeft(r){
             }
         }
         //console.log('start',start,':l',l)
-        
-
     }
     return sh[index]
     // if([1,5,9,13].includes(r)){

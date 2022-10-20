@@ -50,17 +50,36 @@
 
 
 
-function shiftbit32Circular(value,sh){
-    value = value.toString(2)
-    while(value.length < 32){
-        value = '0'+value
-    }
+// function shiftbit32Circular(value,sh){
+//     value = value.toString(2)
+//     while(value.length < 32){
+//         value = '0'+value
+//     }
 
-    console.log(value)
+//     console.log(value)
 
-    let re = value.slice(sh,value.length) + value.slice(0,sh)
-    return parseInt(re,2);
-}
+//     let re = value.slice(sh,value.length) + value.slice(0,sh)
+//     return parseInt(re,2);
+// }
 
 
-console.log(shiftbit32Circular(735250928,7))
+// console.log(shiftbit32Circular(735250928,7))
+
+function safeAdd(x, y) {
+    var lsw = (x & 0xffff) + (y & 0xffff)
+    var msw = (x >> 16) + (y >> 16) + (lsw >> 16)
+    return (msw << 16) | (lsw & 0xffff)
+  }
+
+b = 0xfa9a7e14
+c = 0x38e92c1d
+d = 0x1dd9e3e
+
+f = (c ^ (b | ~d))
+
+
+test = 4294967296
+x = -19088744
+y = 0x01234567
+//console.log(typeof(test))
+console.log(safeAdd(x, y).toString(16))
