@@ -116,7 +116,7 @@ function md_5(str){
 
     for(let datablockIndex = 0;datablockIndex<_M.length;datablockIndex++){
         //console.log('DATA BLOCK '+datablockIndex+1+'/'+_M.length)
-        operation += logAndMakeStr('DATA BLOCK '+datablockIndex+1+'/'+_M.length)
+        operation += logAndMakeStr('DATA BLOCK '+(datablockIndex+1)+'/'+_M.length)
         let a = A;
         let b = B;
         let c = C;
