@@ -95,8 +95,8 @@
     }
 
     function calMd5(){
-        clearResult()
         if (textinput.value != ""){
+            clearResult()
             let md_5 = md5(textinput.value)
             let K = md_5.K //ค่า K เป็น array 1 มิติ
             let datablock = md_5.DATA_BLOCK //datablock เป็น array 2 มิติ
