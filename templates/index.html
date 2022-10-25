@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/mainmd5.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
+    <title>MD 5</title>
+</head>
+<body>
+    <!-- <pre id="md5" style="white-space:pre; line-height: 2.5; direction: ltr"></pre> -->
+    <div class="container jumbotron d-flex align-items-center min-vh-100" id="maindiv">
+        <div class="w-100 mb-50">
+            <div class="text-center mb-4">
+                <h1>Input your text</h1>
+            </div>
+            <div class="border border-primary p-4 rounded">
+                <form action="" onsubmit="event.preventDefault();">
+                    <input type="text" class="form-control" id="textinput" >
+                    <div class="d-flex justify-content-center mt-2">
+                        <button class="btn btn-success mt-2" onclick="calMd5()">Generate</button>
+                    </div>
+                </form>
+                <div class="d-flex justify-content-center mt-2">
+                    <h5 id="result" style="display: none;" class="mt-2"></h5>
+                </div>
+                
+            </div>
+        </div>
+        <!-- <form action="">
+            <input type="text" class="form-control" id="textinput" >
+            <button class="btn btn-success">OK</button>
+        </form> -->
+    </div>
+    <div class="container mt-3" id="allOperation" style="display: none;">
+        <h3>Operation</h3>
+        <h4>&emsp; K value (HEX)</h4>
+        <!-- <table  class="table table-dark">
+            <tbody id="Ktable">
+
+            </tbody>
+        </table> -->
+        <div id="KvalueField">
+            
+        </div>
+        <h4>&emsp; Data Block</h4>
+        <div id="datablockField">
+            
+        </div>
+        <h4>&emsp; M value (HEX)</h4>
+        <div id="MvalueField">
+
+        </div>
+        <pre id="operation" style="white-space:pre; line-height: 2.5; direction: ltr"></pre>
+
+    </div>
+</body>
+<script>
+    // var md5 = document.getElementById('md5')
+    // var md_5 = md_5('They are deterministic')
+    // console.log(md_5)//print ค่าทั้งหมดที่ได้จากฟังชั่น
+
+    // //วิธีดึงค่ามาใช้
+    // var K = md_5.K //ค่า K เป็น array 1 มิติ
+    // var datablock = md_5.DATA_BLOCK //datablock เป็น array 2 มิติ
+    // var M = md_5.M//ค่า M เป็น array 2 มิติ
+    // var operation = md_5.operation//วิธีทำ
+    // var result = md_5.RESULT//คำตอบ
+    
+
+    // md5.innerHTML = operation //เอาวิธีทำไปแสดงใน tag pre
+
+    // console.log(result)//print คำตอบ
+    var maindiv = document.getElementById('maindiv')
+    var textinput = document.getElementById('textinput')
+    var resultfield = document.getElementById('result')
+    var allOperation = document.getElementById('allOperation')
+    var KvalueField = document.getElementById('KvalueField')
+    var datablockField = document.getElementById('datablockField')
+    var MvalueField = document.getElementById('MvalueField')
+    var operationfield = document.getElementById('operation')
+
+    function clearResult(){
+        maindiv.className = "container jumbotron d-flex align-items-center min-vh-100"
+        resultfield.style.display = 'none'
+        resultfield.innerHTML = ''
+        KvalueField.innerHTML = ''
+        datablockField.innerHTML = ''
+        MvalueField.innerHTML = ''
+        operationfield.innerHTML = ''
+        allOperation.style.display = 'none'
+    }
+
+    function calMd5(){
+        clearResult()
+        if (textinput.value != ""){
+            let md_5 = md5(textinput.value)
+            let K = md_5.K //ค่า K เป็น array 1 มิติ
+            let datablock = md_5.DATA_BLOCK //datablock เป็น array 2 มิติ
+            let M = md_5.M//ค่า M เป็น array 2 มิติ
+            let operation = md_5.operation//วิธีทำ
+            let result = md_5.RESULT//คำตอบ
+            
+            maindiv.className = "container"
+            maindiv.classList.add('mt-5')
+
+            resultfield.style.display = 'block'
+            resultfield.innerHTML = 'MD5 Hash:&ensp;'+result
+
+            //display K value
+            let Ktable = document.createElement('table')
+            let Ktbody = document.createElement('tbody')
+            for(let i=0;i<8;i++){
+                let tr = document.createElement('tr')
+                for(let j=0;j<8;j++){
+                    let td = document.createElement('td')
+                    let kindex = 1+i+(j*8)
+                    td.innerHTML = 'K'+kindex+': '+K[kindex-1].toUpperCase();
+                    tr.appendChild(td)
+                }
+                Ktbody.appendChild(tr)
+                
+            }
+            Ktable.appendChild(Ktbody)
+            Ktable.className = 'table table-dark'
+            KvalueField.appendChild(Ktable)
+
+            //display datablock
+            for(let i=0;i<datablock.length;i++){
+                let Dtable = document.createElement('table')
+                let Dtbody = document.createElement('tbody')
+                let tr = document.createElement('tr')
+                for(let j=0;j<datablock[i].length;j++){
+                    let td = document.createElement('td')
+                    td.innerHTML = datablock[i][j]
+                    tr.appendChild(td)
+                    if(((j+1) % 8) == 0){
+                        Dtbody.appendChild(tr)
+                        tr = document.createElement('tr')
+                    }                    
+                }
+                Dtable.appendChild(Dtbody)
+                Dtable.className = 'table table-dark'
+                datablockField.appendChild(Dtable)
+            }
+
+            //display M
+            for(let i=0;i<M.length;i++){
+                let Mtable = document.createElement('table')
+                let Mtbody = document.createElement('tbody')
+                let tr = document.createElement('tr')
+                for(let j=0;j<M[i].length;j++){
+                    let td = document.createElement('td')
+                    td.innerHTML = 'M'+j+': '+M[i][j].toUpperCase()
+                    tr.appendChild(td)
+                    if(((j+1) % 4) == 0){
+                        Mtbody.appendChild(tr)
+                        tr = document.createElement('tr')
+                    }                    
+                }
+                Mtable.appendChild(Mtbody)
+                Mtable.className = 'table table-dark'
+                MvalueField.appendChild(Mtable)
+            }
+            operationfield.innerHTML = operation
+            allOperation.style.display = 'block'
+        }
+    }
+
+</script>
+</html>
