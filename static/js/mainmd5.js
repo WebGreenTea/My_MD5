@@ -261,7 +261,7 @@ function shiftbit32Circular(value,sh){
 }
 
 function countOfShiftLeft(r){
-    sh = [7,12,17,22,5,9,14,20,4,11,16,13,6,10,15,21]
+    sh = [7,12,17,22,5,9,14,20,4,11,16,23,6,10,15,21]
     start = 1
     l = start
     index = 0
